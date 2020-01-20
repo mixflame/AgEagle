@@ -1,0 +1,17 @@
+name: AgEagle
+version: 0.1.0
+
+authors:
+  - Jonathan Silverman <jsilverman2@gmail.com>
+
+targets:
+  AgEagle:
+    main: src/AgEagle.cr
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+
+crystal: 0.30.1
+
+license: MIT
