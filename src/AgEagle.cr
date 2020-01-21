@@ -2,7 +2,7 @@ require "kemal"
 require "http/client"
 
 get "/" do
-  "Hello World!"
+  render "src/views/index.ecr"
 end
 
 def rand(max)
@@ -28,16 +28,20 @@ def randomCoordinate
 end
 
 def getWeather(coord)
-  lat = coord[0]
-  lon = coord[1]
-  response = HTTP::Client.get "https://samples.openweathermap.org/data/2.5/weather?lat=#{lat}&lon=#{lon}&appid=b6907d289e10d714a6e88b30761fae22"
+  lat = coord[0].to_i
+  lon = coord[1].to_i
+  response = HTTP::Client.get "https://api.openweathermap.org/data/2.5/weather?lat=#{lat}&lon=#{lon}&appid=3d6130c27f4a83543f04d690f1e54605"
   response.status_code # => 200
-  response.body
+  JSON.parse(response.body)
 end
 
 get "/points/:points" do |env|
-  points = env.params.url["points"]
-  getWeather(randomCoordinate)
+  points = env.params.url["points"].to_i
+  output = [] of JSON::Any
+  (1..points).each do
+    output << getWeather(randomCoordinate)
+  end
+  output.to_json
 end
 
 Kemal.run
